@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href='styles/styles.css'/>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.2-rc.0/web3.min.js' defer="true"></script>
+    <script src="js/controller.js" defer="true"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="appName">
+        <h1>D-Voted</h1>
+    </div>
+    <form id="dataEntry" action="//www.google.com">
+        <label for ="adharNo" > Enter Adhar: </label>
+        <input id="adharNo" type="text" name ='adharNo' pattern=".{12}" autocomplete="off" oninput="verifyAdhar(this)">
+        <label for="parties"> Choose candidates:</label>
+        <select id="parties" name="parties">
+        </select>
+        <button type="submit" >
+            Vote
+        </button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,72 @@
+body{
+    position:relative;
+    padding:0px;
+}
+#appName{
+    margin:0;
+    position:sticky;
+    top:0;
+    display:flex;
+    background-color:lightblue;
+    padding:4px;
+}
+h1{
+    margin:0px;
+    color:maroon;
+    font-size:3em;
+    font-family:Arial, Helvetica, sans-serif;
+    margin-left:auto;
+}
+
+#dataEntry{
+    width:min(50vw,50vh);
+    margin:auto;
+    background-color: rgba(60, 168, 168, 0.664);
+    height:min(50vw,50vh);
+    margin-top:10vh;
+    border-radius:5px;
+    box-shadow: 2px 2px 3px maroon ;
+    box-sizing:border-box;
+    padding:50px 20px 50px;
+}
+input[name='adharNo'],select[name='parties']{
+    outline:none;
+    border:0px;
+    background-color: transparent;
+    border-bottom: 2px solid black;
+    width:100%;
+    font-size:1.1em;
+    transition:background-color 1s;
+    padding:5px 20px;
+    box-sizing: border-box;
+    color:maroon;
+}
+#adharNo:invalid {
+    background-color:rgba(255, 92, 80, 0.438);
+}
+#adharNo:invalid ~ button{
+    opacity: 50%;
+}
+#dataEntry label{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color:brown;
+}
+#dataEntry  *:first-of-type:focus{
+    background-color:aquamarine;
+    border-radius:5px;
+}
+#dataEntry button{
+    margin-left:auto;
+    margin-top:50px;
+    display:block;
+    height:45px;
+    width:90px;
+    background-color:rgb(83, 116, 53);
+    border-radius: 15px;
+    border:0;
+    opacity:100%;
+    transition: opacity 0.1s;
+}
+#dataEntry button:active{
+    background-color:blueviolet;
+}

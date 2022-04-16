@@ -1,0 +1,79 @@
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.13;
+library safeMath{
+  function add(uint a,uint b) internal pure returns(uint){
+    require(a+b>a,"integer overflow");
+    return a+b;
+  }
+}
+contract crowdfunding {
+  using safeMath for uint;
+  uint totalFunders;
+  uint minimum_wei;
+  address owner;
+  uint deadline;
+  uint votes;
+  uint totalFunds;
+  bool can_take_out;
+  mapping(address=>bool) voted;
+  mapping(address=>uint) funded;
+  event gotFunding(address indexed from ,uint amount);
+  event takenOutFunding(address indexed from);
+  constructor(uint ndays,uint min_gwei){
+    deadline =uint(ndays*(1 minutes)).add(block.timestamp);
+    owner=msg.sender;
+    minimum_wei=min_gwei*(1 gwei);
+  }
+  function fund()public payable {
+    require(msg.value>=minimum_wei,"sorry! We dont take less than a minimum amount. ");
+    require(block.timestamp<deadline && !can_take_out,"time over. ThankYou!");
+    if(funded[msg.sender]<minimum_wei)
+      {
+        totalFunders++;
+      }
+      totalFunds+=msg.value;
+      funded[msg.sender]+=msg.value;
+      emit gotFunding(msg.sender,msg.value);
+  }
+  function voteForOut()public {
+    require(block.timestamp>deadline && block.timestamp<deadline+2 days);
+    require(funded[msg.sender]>=minimum_wei,"you can't vote");
+    require(voted[msg.sender] , "Yo've already voted");
+    voted[msg.sender]=true;
+    votes+=funded[msg.sender];
+  }
+  function checkVotes()public view returns(uint total_votes,uint total_Funds){
+    return (votes,totalFunds);
+  }
+  function getEthersBack()public{
+    require(block.timestamp>deadline+1 minutes && !can_take_out,"time does not meet deadline yet");
+    payable(msg.sender).transfer(funded[msg.sender]);
+    totalFunds-=funded[msg.sender];
+    funded[msg.sender]=0;
+    emit takenOutFunding(msg.sender);
+  }
+  modifier is_able(uint value){
+    require(msg.sender==owner,"only the owner can take funds");
+    require(address(this).balance>=value,"not enough fund");
+    require(votes>address(this).balance/2);
+    require(can_take_out || deadline+2 days<block.timestamp);
+    if(!can_take_out)
+      can_take_out=true;
+    _;
+  }
+  function getFundingsTotal() public view returns(uint){
+    return address(this).balance/(1 gwei);
+  }
+  function getMyFundings() public view returns(uint){
+    return funded[msg.sender]/(1 gwei);
+  }
+  function takeOut(uint value)public is_able(value){
+    payable(owner).transfer(value);
+  }
+  receive()external payable{
+    fund();
+  }
+  fallback()external payable{
+    fund();
+  }
+}
